@@ -41,6 +41,17 @@ function App() {
     fetch("/api/health").then(r => r.json()).then(setHealth).catch(() => setHealth({ollama:false}));
   }, []);
 
+  useEffect(() => () => {
+    if (visionTimerRef.current) clearInterval(visionTimerRef.current);
+    const recorder = recorderRef.current;
+    if (recorder && recorder.state !== "inactive") {
+      recorder.onstop = null;
+      recorder.stop();
+    }
+    streamRef.current?.getTracks().forEach(track => track.stop());
+    streamRef.current = null;
+  }, []);
+
   useEffect(() => {
     const onVisibility = () => {
       if (document.hidden && step === "interview") {
