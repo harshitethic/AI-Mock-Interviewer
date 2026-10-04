@@ -7,9 +7,8 @@ def extract_resume(path: str) -> str:
     suffix = p.suffix.lower()
 
     if suffix == ".pdf":
-        doc = fitz.open(path)
-        text = "\n".join(page.get_text() for page in doc)
-        doc.close()
+        with fitz.open(path) as doc:
+            text = "\n".join(page.get_text() for page in doc)
         return text.strip()
 
     if suffix == ".docx":
