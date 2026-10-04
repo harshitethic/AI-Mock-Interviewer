@@ -21,7 +21,12 @@ def ollama_chat(messages, json_mode=False):
         timeout=180
     )
     response.raise_for_status()
-    return response.json()["message"]["content"]
+    data = response.json()
+    message = data.get("message") or {}
+    content = message.get("content")
+    if not isinstance(content, str) or not content.strip():
+        raise ValueError("Ollama returned an empty or invalid message.")
+    return content
 
 def parse_json(text):
     text = text.strip()
