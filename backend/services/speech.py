@@ -25,11 +25,13 @@ def transcribe(path: str):
 
 def speak_to_file(text: str, output_path: str):
     engine = pyttsx3.init()
-    engine.setProperty("rate", 170)
-    engine.setProperty("volume", 1.0)
-    voices = engine.getProperty("voices")
-    if voices:
-        engine.setProperty("voice", voices[0].id)
-    engine.save_to_file(text, output_path)
-    engine.runAndWait()
-    engine.stop()
+    try:
+        engine.setProperty("rate", 170)
+        engine.setProperty("volume", 1.0)
+        voices = engine.getProperty("voices")
+        if voices:
+            engine.setProperty("voice", voices[0].id)
+        engine.save_to_file(text, output_path)
+        engine.runAndWait()
+    finally:
+        engine.stop()
